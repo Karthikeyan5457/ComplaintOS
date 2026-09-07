@@ -6,7 +6,7 @@ import { formatRelativeTime } from '../../utils/helpers';
 import type { Notification } from '../../types';
 
 export default function Header({ title }: { title?: string }) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [showNotifications, setShowNotifications] = useState(false);

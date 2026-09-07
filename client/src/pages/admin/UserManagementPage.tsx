@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { usersApi, departmentsApi } from '../../api/client';
 import Header from '../../components/layout/Header';
 import Modal from '../../components/ui/Modal';
-import { Users, Search, Edit, Shield, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Search, Edit, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { formatDate } from '../../utils/helpers';
 import type { User, Department } from '../../types';
 

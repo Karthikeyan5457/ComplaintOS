@@ -13,6 +13,7 @@ export default function ComplaintListPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [data, setData] = useState<PaginatedResponse<Complaint> | null>(null);
   const [departments, setDepartments] = useState<Department[]>([]);
+  // @ts-ignore
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState(searchParams.get('search') || '');

@@ -8,7 +8,7 @@ import Modal from '../../components/ui/Modal';
 import { formatDateTime, formatRelativeTime, getSlaStatus, statusLabel } from '../../utils/helpers';
 import {
   ArrowLeft, MapPin, Phone, Brain, Sparkles, Clock, MessageSquare,
-  History, Send, AlertTriangle, CheckCircle, User as UserIcon, Paperclip, RefreshCw,
+  History, Send, AlertTriangle, CheckCircle, User as UserIcon, RefreshCw,
 } from 'lucide-react';
 import type { Complaint, User } from '../../types';
 

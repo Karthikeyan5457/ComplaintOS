@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/AuthContext';
+
 import { analyticsApi } from '../../api/client';
 import Header from '../../components/layout/Header';
 import StatsCard from '../../components/ui/StatsCard';
 import {
   FileText, Clock, CheckCircle, AlertTriangle, TrendingUp,
-  XCircle, Zap, BarChart3, Target,
+  Zap, BarChart3, Target,
 } from 'lucide-react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  PieChart, Pie, Cell, LineChart, Line, Area, AreaChart, Legend,
+  PieChart, Pie, Cell, Area, AreaChart, Legend,
 } from 'recharts';
 import type { DashboardStats, TrendData } from '../../types';
 
