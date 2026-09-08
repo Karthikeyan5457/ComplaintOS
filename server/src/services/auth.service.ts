@@ -57,7 +57,7 @@ export class AuthService {
   async getProfile(userId: string) {
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, email, name, role, phone, avatar, departmentId, isActive, createdAt, departments!fk_department(id, name)')
+      .select('id, email, name, role, phone, avatar, departmentId, isActive, createdAt, departments!departmentId(id, name)')
       .eq('id', userId)
       .maybeSingle();
 

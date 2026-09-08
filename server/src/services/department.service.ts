@@ -7,8 +7,8 @@ export class DepartmentService {
       .from('departments')
       .select(`
         *,
-        head:users!departments_headId_fkey(id, name, email),
-        staff:users!users_departmentId_fkey(count),
+        head:users!headId(id, name, email),
+        staff:users!departmentId(count),
         complaints(count)
       `)
       .order('name', { ascending: true });
@@ -29,8 +29,8 @@ export class DepartmentService {
       .from('departments')
       .select(`
         *,
-        head:users!departments_headId_fkey(id, name, email),
-        staff:users!users_departmentId_fkey(id, name, email, role),
+        head:users!headId(id, name, email),
+        staff:users!departmentId(id, name, email, role),
         complaints(count)
       `)
       .eq('id', id)
@@ -50,7 +50,7 @@ export class DepartmentService {
     const { data: created, error } = await supabase
       .from('departments')
       .insert(data)
-      .select(`*, head:users!departments_headId_fkey(id, name)`)
+      .select(`*, head:users!headId(id, name)`)
       .single();
 
     if (error) throw new AppError('Failed to create department', 500);
@@ -66,7 +66,7 @@ export class DepartmentService {
       .from('departments')
       .update(data)
       .eq('id', id)
-      .select(`*, head:users!departments_headId_fkey(id, name)`)
+      .select(`*, head:users!headId(id, name)`)
       .single();
 
     if (error) throw new AppError('Failed to update department', 500);
