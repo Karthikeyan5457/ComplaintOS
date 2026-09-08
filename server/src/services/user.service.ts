@@ -9,7 +9,7 @@ export class UserService {
 
     let query = supabase
       .from('users')
-      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments(id, name)', { count: 'exact' });
+      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments!departmentId(id, name)', { count: 'exact' });
 
     if (role) {
       query = query.eq('role', role);
@@ -37,7 +37,7 @@ export class UserService {
   async findById(id: string) {
     const { data: user, error } = await supabase
       .from('users')
-      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments(id, name)')
+      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments!departmentId(id, name)')
       .eq('id', id)
       .maybeSingle();
 
@@ -59,7 +59,7 @@ export class UserService {
       .from('users')
       .update(data)
       .eq('id', id)
-      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments(id, name)')
+      .select('id, email, name, role, phone, avatar, isActive, departmentId, createdAt, departments!departmentId(id, name)')
       .single();
 
     if (error) throw new AppError('Failed to update user', 500);
