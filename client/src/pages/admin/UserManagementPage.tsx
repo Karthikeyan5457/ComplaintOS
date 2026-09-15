@@ -32,7 +32,7 @@ export default function UserManagementPage() {
     if (!editUser) return;
     await usersApi.update(editUser.id, {
       role: editForm.role,
-      departmentId: editForm.departmentId || null,
+      departmentId: editForm.role === 'STAFF' ? (editForm.departmentId || null) : null,
       isActive: editForm.isActive,
     });
     setEditUser(null);
@@ -175,10 +175,15 @@ export default function UserManagementPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-surface-300 mb-1.5">Department</label>
-            <select value={editForm.departmentId} onChange={e => setEditForm({ ...editForm, departmentId: e.target.value })} className="w-full px-3 py-2 bg-surface-800 border border-surface-700 rounded-xl text-sm text-white">
+            <select 
+              value={editForm.role === 'STAFF' ? editForm.departmentId : ''} 
+              onChange={e => setEditForm({ ...editForm, departmentId: e.target.value })} 
+              disabled={editForm.role !== 'STAFF'}
+              className="w-full px-3 py-2 bg-surface-800 border border-surface-700 rounded-xl text-sm text-white disabled:opacity-50 disabled:cursor-not-allowed">
               <option value="">None</option>
               {departments.map(d => <option key={d.id} value={d.id}>{d.name}</option>)}
             </select>
+            {editForm.role !== 'STAFF' && <p className="text-xs text-surface-500 mt-1">Only staff can be assigned to a department.</p>}
           </div>
           <label className="flex items-center gap-2 text-sm text-surface-300 cursor-pointer">
             <input type="checkbox" checked={editForm.isActive} onChange={e => setEditForm({ ...editForm, isActive: e.target.checked })} />

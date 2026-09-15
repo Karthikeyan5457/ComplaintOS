@@ -55,6 +55,13 @@ export class UserService {
     // Remove department from data if it was passed accidentally
     delete data.department;
 
+    // Enforce that only STAFF can have a department
+    const { data: currentUser } = await supabase.from('users').select('role').eq('id', id).single();
+    const finalRole = data.role || currentUser?.role;
+    if (finalRole !== 'STAFF') {
+      data.departmentId = null;
+    }
+
     const { data: user, error } = await supabase
       .from('users')
       .update(data)
