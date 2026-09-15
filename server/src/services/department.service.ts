@@ -78,6 +78,15 @@ export class DepartmentService {
   }
 
   async delete(id: string) {
+    // Check if department has complaints
+    const { count, error: countErr } = await supabase
+      .from('complaints')
+      .select('*', { count: 'exact', head: true })
+      .eq('departmentId', id);
+
+    if (countErr) throw new AppError('Error checking complaints', 500);
+    if ((count || 0) > 0) throw new AppError('Cannot delete department because there are complaints linked to it. Please edit and deactivate it instead.', 400);
+
     const { error } = await supabase
       .from('departments')
       .delete()
