@@ -37,7 +37,7 @@ export class DepartmentController {
   async delete(req: AuthRequest, res: Response) {
     try {
       await departmentService.delete(param(req, 'id'));
-      res.json({ message: 'Department deactivated' });
+      res.json({ message: 'Department deleted' });
     } catch (error: any) { res.status(error.statusCode || 500).json({ error: error.message }); }
   }
 }
@@ -95,6 +95,12 @@ export class UserController {
     try {
       const user = await userService.update(param(req, 'id'), req.body);
       res.json(user);
+    } catch (error: any) { res.status(error.statusCode || 500).json({ error: error.message }); }
+  }
+  async delete(req: AuthRequest, res: Response) {
+    try {
+      await userService.delete(param(req, 'id'));
+      res.json({ message: 'User deleted' });
     } catch (error: any) { res.status(error.statusCode || 500).json({ error: error.message }); }
   }
   async getStaffByDepartment(req: AuthRequest, res: Response) {

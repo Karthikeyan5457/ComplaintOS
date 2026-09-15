@@ -32,6 +32,7 @@ router.delete('/categories/:id', requireRole('ADMIN'), (req, res) => categoryCon
 router.get('/users', requireRole('ADMIN'), (req, res) => userController.findAll(req, res));
 router.get('/users/:id', requireRole('ADMIN'), (req, res) => userController.findById(req, res));
 router.patch('/users/:id', requireRole('ADMIN'), validate(updateUserSchema), (req, res) => userController.update(req, res));
+router.delete('/users/:id', requireRole('ADMIN'), (req, res) => userController.delete(req, res));
 router.get('/users/department/:departmentId', requireRole('ADMIN', 'STAFF'), (req, res) => userController.getStaffByDepartment(req, res));
 
 // --- SLA Rules ---

@@ -88,7 +88,8 @@ export const usersApi = {
   findAll: (params?: any) => api.get('/users', { params }),
   findById: (id: string) => api.get(`/users/${id}`),
   update: (id: string, data: any) => api.patch(`/users/${id}`, data),
-  getStaffByDepartment: (deptId: string) => api.get(`/users/department/${deptId}`),
+  delete: (id: string) => api.delete(`/users/${id}`),
+  getStaffByDepartment: (departmentId: string) => api.get(`/departments/${departmentId}/staff`),
 };
 
 // SLA

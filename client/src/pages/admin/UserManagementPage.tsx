@@ -42,10 +42,14 @@ export default function UserManagementPage() {
 
   const handleDelete = async (u: User) => {
     if (u.role === 'ADMIN') return alert('Cannot delete an admin account');
-    if (!confirm(`Are you sure you want to delete "${u.name}" (${u.email})? This action cannot be undone.`)) return;
-    await usersApi.update(u.id, { isActive: false });
-    usersApi.findAll({ page, limit: 15, search, role: roleFilter || undefined })
-      .then(r => { setUsers(r.data.users); setTotal(r.data.pagination.total); });
+    if (!confirm(`Are you sure you want to completely erase "${u.name}" (${u.email})? This action cannot be undone. To simply disable their account, use the Edit button to set them to Inactive.`)) return;
+    try {
+      await usersApi.delete(u.id);
+      usersApi.findAll({ page, limit: 15, search, role: roleFilter || undefined })
+        .then(r => { setUsers(r.data.users); setTotal(r.data.pagination.total); });
+    } catch (e: any) {
+      alert(e.response?.data?.error || 'Failed to delete user');
+    }
   };
 
   const roleColors: Record<string, string> = {

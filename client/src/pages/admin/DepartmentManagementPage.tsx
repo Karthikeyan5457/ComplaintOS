@@ -12,7 +12,7 @@ export default function DepartmentManagementPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [editing, setEditing] = useState<Department | null>(null);
-  const [form, setForm] = useState({ name: '', description: '' });
+  const [form, setForm] = useState({ name: '', description: '', isActive: true });
 
   const load = () => {
     setLoading(true);
@@ -28,14 +28,18 @@ export default function DepartmentManagementPage() {
     }
     setShowModal(false);
     setEditing(null);
-    setForm({ name: '', description: '' });
+    setForm({ name: '', description: '', isActive: true });
     load();
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Deactivate this department?')) return;
-    await departmentsApi.delete(id);
-    load();
+    if (!confirm('Are you sure you want to completely erase this department? This action cannot be undone. To simply disable it, use the Edit button to set it to Inactive.')) return;
+    try {
+      await departmentsApi.delete(id);
+      load();
+    } catch (e: any) {
+      alert(e.response?.data?.error || 'Failed to delete department');
+    }
   };
 
   return (
@@ -45,7 +49,7 @@ export default function DepartmentManagementPage() {
         <div className="flex items-center justify-between">
           <p className="text-sm text-surface-400">{departments.length} departments</p>
           <button
-            onClick={() => { setEditing(null); setForm({ name: '', description: '' }); setShowModal(true); }}
+            onClick={() => { setEditing(null); setForm({ name: '', description: '', isActive: true }); setShowModal(true); }}
             className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white text-sm font-medium rounded-xl hover:bg-primary-500 transition-colors"
           >
             <Plus className="w-4 h-4" /> Add Department
@@ -70,7 +74,7 @@ export default function DepartmentManagementPage() {
                   </div>
                 </div>
                 <div className="flex gap-1" onClick={e => e.stopPropagation()}>
-                  <button onClick={() => { setEditing(d); setForm({ name: d.name, description: d.description || '' }); setShowModal(true); }}
+                  <button onClick={() => { setEditing(d); setForm({ name: d.name, description: d.description || '', isActive: d.isActive }); setShowModal(true); }}
                     className="p-1.5 rounded-lg text-surface-400 hover:text-white hover:bg-surface-800 transition-colors">
                     <Edit className="w-3.5 h-3.5" />
                   </button>
@@ -101,6 +105,10 @@ export default function DepartmentManagementPage() {
             <label className="block text-sm font-medium text-surface-300 mb-1.5">Description</label>
             <textarea value={form.description} onChange={e => setForm({ ...form, description: e.target.value })} rows={3} className="w-full p-3 bg-surface-800 border border-surface-700 rounded-xl text-sm text-white resize-none" placeholder="Description" />
           </div>
+          <label className="flex items-center gap-2 text-sm text-surface-300 cursor-pointer">
+            <input type="checkbox" checked={form.isActive} onChange={e => setForm({ ...form, isActive: e.target.checked })} />
+            Active
+          </label>
           <button onClick={handleSave} disabled={!form.name} className="w-full py-2 bg-primary-600 text-white rounded-xl hover:bg-primary-500 disabled:opacity-50 text-sm font-medium transition-colors">
             {editing ? 'Update' : 'Create'} Department
           </button>
