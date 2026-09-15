@@ -46,6 +46,17 @@ export class AuthController {
       res.status(error.statusCode || 500).json({ error: error.message });
     }
   }
+
+  async updateProfile(req: AuthRequest, res: Response) {
+    try {
+      const { name } = req.body;
+      if (!name) return res.status(400).json({ error: 'Name is required' });
+      const user = await userService.update(req.user!.id, { name });
+      res.json(user);
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  }
 }
 
 export const authController = new AuthController();

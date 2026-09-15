@@ -10,6 +10,7 @@ const router = Router();
 router.post('/register', validate(registerSchema), (req, res) => authController.register(req, res));
 router.post('/login', validate(loginSchema), (req, res) => authController.login(req, res));
 router.get('/me', authenticate, (req, res) => authController.getProfile(req, res));
+router.patch('/profile', authenticate, (req, res) => authController.updateProfile(req, res));
 router.post('/avatar', authenticate, upload.single('file'), (req, res) => authController.uploadAvatar(req, res));
 
 export default router;

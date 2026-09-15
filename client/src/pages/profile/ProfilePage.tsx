@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
-import { usersApi } from '../../api/client';
+import { authApi } from '../../api/client';
 import Header from '../../components/layout/Header';
 import { User, Mail, Save, Shield } from 'lucide-react';
 
@@ -15,7 +15,7 @@ export default function ProfilePage() {
     setLoading(true);
     setMessage('');
     try {
-      await usersApi.update(user.id, { name });
+      await authApi.updateProfile({ name });
       await refreshProfile();
       setMessage('Profile updated successfully.');
     } catch (e: any) {
