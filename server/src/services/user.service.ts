@@ -81,17 +81,8 @@ export class UserService {
   }
 
   async delete(id: string) {
-    // Check if they are assigned to any complaints
-    const { count, error: countErr } = await supabase
-      .from('complaints')
-      .select('*', { count: 'exact', head: true })
-      .or(`userId.eq.${id},assignedToId.eq.${id}`);
-
-    if (countErr) throw new AppError('Error checking user complaints', 500);
-    if ((count || 0) > 0) throw new AppError('Cannot completely delete user because they are linked to existing complaints. Please edit and deactivate their account instead.', 400);
-
     const { error } = await supabase.from('users').delete().eq('id', id);
-    if (error) throw new AppError('Failed to delete user. Please deactivate instead.', 500);
+    if (error) throw new AppError('Failed to delete user: ' + error.message, 500);
     return { success: true };
   }
 }
