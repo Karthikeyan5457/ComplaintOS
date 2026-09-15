@@ -391,6 +391,24 @@ export class ComplaintService {
 
     return updated;
   }
+
+  async delete(complaintId: string, userId: string, userRole: string, userDepartmentId?: string | null) {
+    const { data: complaint } = await supabase.from('complaints').select('departmentId').eq('id', complaintId).maybeSingle();
+    if (!complaint) throw new AppError('Complaint not found', 404);
+
+    if (userRole === 'STAFF') {
+      if (!userDepartmentId || complaint.departmentId !== userDepartmentId) {
+        throw new AppError('Access denied: You can only delete complaints from your own department', 403);
+      }
+    } else if (userRole !== 'ADMIN') {
+      throw new AppError('Access denied', 403);
+    }
+
+    const { error } = await supabase.from('complaints').delete().eq('id', complaintId);
+    if (error) throw new AppError('Failed to delete complaint', 500);
+
+    return { success: true };
+  }
 }
 
 export const complaintService = new ComplaintService();

@@ -18,5 +18,6 @@ router.post('/:id/status', requireRole('ADMIN', 'STAFF'), validate(updateStatusS
 router.post('/:id/assign', requireRole('ADMIN', 'STAFF'), validate(assignComplaintSchema), (req, res) => complaintController.assign(req, res));
 router.post('/:id/comments', validate(createCommentSchema), (req, res) => complaintController.addComment(req, res));
 router.post('/:id/attachments', upload.single('file'), (req, res) => complaintController.uploadAttachment(req, res));
+router.delete('/:id', requireRole('ADMIN', 'STAFF'), (req, res) => complaintController.delete(req, res));
 
 export default router;

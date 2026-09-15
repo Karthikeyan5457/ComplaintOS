@@ -128,6 +128,15 @@ export class ComplaintController {
       res.status(error.statusCode || 500).json({ error: error.message });
     }
   }
+
+  async delete(req: AuthRequest, res: Response) {
+    try {
+      await complaintService.delete(param(req, 'id'), req.user!.id, req.user!.role, req.user!.departmentId);
+      res.json({ message: 'Complaint deleted successfully' });
+    } catch (error: any) {
+      res.status(error.statusCode || 500).json({ error: error.message });
+    }
+  }
 }
 
 export const complaintController = new ComplaintController();

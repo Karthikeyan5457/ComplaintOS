@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { complaintsApi, usersApi } from '../../api/client';
 import { useAuth } from '../../contexts/AuthContext';
 import Header from '../../components/layout/Header';
@@ -8,12 +8,13 @@ import Modal from '../../components/ui/Modal';
 import { formatDateTime, formatRelativeTime, getSlaStatus, statusLabel } from '../../utils/helpers';
 import {
   ArrowLeft, MapPin, Phone, Brain, Sparkles, Clock, MessageSquare,
-  History, Send, AlertTriangle, CheckCircle, User as UserIcon, RefreshCw,
+  History, Send, AlertTriangle, CheckCircle, User as UserIcon, RefreshCw, Trash2
 } from 'lucide-react';
 import type { Complaint, User } from '../../types';
 
 export default function ComplaintDetailPage() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { user } = useAuth();
   const [complaint, setComplaint] = useState<Complaint | null>(null);
   const [loading, setLoading] = useState(true);
@@ -82,6 +83,17 @@ export default function ComplaintDetailPage() {
       setAssigneeId('');
       loadComplaint();
     } catch {}
+  };
+
+  const handleDelete = async () => {
+    if (!id) return;
+    if (!confirm('Are you sure you want to delete this complaint? This action cannot be undone.')) return;
+    try {
+      await complaintsApi.delete(id);
+      navigate('/complaints');
+    } catch (error) {
+      alert('Failed to delete complaint. You might not have permission.');
+    }
   };
 
   if (loading) {
@@ -167,6 +179,14 @@ export default function ComplaintDetailPage() {
                   >
                     <UserIcon className="w-3 h-3 inline mr-1" /> Assign
                   </button>
+                  {(user?.role === 'ADMIN' || (user?.role === 'STAFF' && user?.departmentId === complaint.departmentId)) && (
+                    <button
+                      onClick={handleDelete}
+                      className="px-3 py-1.5 text-xs font-medium rounded-lg bg-red-600/20 text-red-400 hover:bg-red-600/30 transition-colors"
+                    >
+                      <Trash2 className="w-3 h-3 inline mr-1" /> Delete
+                    </button>
+                  )}
                 </div>
               )}
 
